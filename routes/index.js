@@ -8,8 +8,49 @@ router.get('/', function(req, res, next) {
 module.exports = router;
 /*GET Turn */
 router.get('/turn', function(req, res ) {
-  res.send('You picked ${req.query.choice}');
+ let playerChoice = req.query.Choice;
+ let pcChoice = getPcChoice(['rock', 'paper', 'scissors']);
+ let winner = pickWinner(playerChoice, pcChoice);
+  res.render(`result`,{
+    playerChoice: playerChoice,
+    pcChoice: pcChoice,
+    winner:winner
+  })
 })
 function getRandomInt(max){
-  return math.floor( math.random() *max);
+  return math.floor( math.random() * max);
+}
+function getPcChoice(options){
+  let choiceIndex = getRandomInt(3);
+  return options[choiceIndex];
+}
+function pickWinner(playerChoice, pcChoice) {
+  if (playerChoice === pcChoice) {
+    return 'draw';
+  }
+  if (playerChoice === 'rock') {
+    if (pcChoice === 'paper') {
+      return 'pc';
+    }
+    if (pcChoice === 'scissors') {
+      return 'player';
+    }
+  }
+  if (playerChoice === 'paper') {
+    if (pcChoice === 'rock') {
+      return 'player';
+    }
+    if (pcChoice === 'scissors') {
+      return 'pc';
+    }
+  }
+  if (playerChoice === 'scissors') {
+    if (pcChoice === 'rock') {
+      return 'pc';
+    }
+    if (pcChoice === 'paper') {
+      return 'player';
+    }
+  }
+  return 'invalid';
 }
